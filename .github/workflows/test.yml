@@ -49,10 +49,16 @@ jobs:
           WS_PORT: 2059
           CDN_PORT: 2058
           NODE_ENV: test
-          JWT_SECRET: ci-jwt-wf-test
         run: |
+          set -euo pipefail
+
+          export JWT_SECRET="ci-jwt-$(openssl rand -hex 32)"
+          export ADMIN_KEY="ci-admin-$(openssl rand -hex 32)"
+
           npm start > server.log 2>&1 &
           echo $! > server.pid
+
+          echo "Server started with PID $(cat server.pid)"
 
       - name: Test HTTP endpoints
         shell: bash
