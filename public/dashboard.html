@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resurge Dashboard</title>
+    <link rel="stylesheet" href="/dashboard.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎮 Resurge</h1>
+            <p class="subtitle">Everyone's Inside View!</p>
+        </header>
+
+        <nav class="main-nav">
+            <button class="nav-btn active" data-section="overview">Overview</button>
+            <button class="nav-btn" data-section="players">Players</button>
+            <button class="nav-btn" data-section="sessions">Sessions</button>
+            <button class="nav-btn" data-section="gallery">Image Gallery</button>
+            <button class="nav-btn" data-section="myimages">My Images</button>
+            <button class="nav-btn" data-section="profile">My Profile</button>
+        </nav>
+
+        <!-- Overview Section -->
+        <section class="section active" id="overview">
+            <div class="status-section">
+                <div class="status-card">
+                    <h2>Server Status</h2>
+                    <div class="status-indicator" id="serverStatus">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Checking...</span>
+                    </div>
+                    <div class="status-details">
+                        <div class="detail-item">
+                            <span class="label">Workers:</span>
+                            <span class="value" id="workerCount">4</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Port:</span>
+                            <span class="value">2056</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">WebSocket:</span>
+                            <span class="value">2059</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">CDN:</span>
+                            <span class="value">2058</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="status-card">
+                    <h2>Memory Usage</h2>
+                    <div class="memory-stats">
+                        <div class="memory-bar">
+                            <div class="memory-fill" id="memoryBar"></div>
+                        </div>
+                        <div class="memory-details">
+                            <div class="detail-item">
+                                <span class="label">Heap Used:</span>
+                                <span class="value" id="heapUsed">--</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="label">Heap Total:</span>
+                                <span class="value" id="heapTotal">--</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="label">External:</span>
+                                <span class="value" id="external">--</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="label">RSS:</span>
+                                <span class="value" id="rss">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Players</h3>
+                    <div class="stat-value" id="totalPlayers">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Online Players</h3>
+                    <div class="stat-value" id="onlinePlayers">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Active Sessions</h3>
+                    <div class="stat-value" id="totalSessions">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Server Uptime</h3>
+                    <div class="stat-value" id="uptime">0s</div>
+                </div>
+            </div>
+
+            <div class="downloads-card">
+                <h2>📥 Downloads</h2>
+                <div class="download-item">
+                    <div class="download-info">
+                        <div class="download-name">Resurge-VR-Edition</div>
+                        <div class="download-desc">PCVR/Quest Version</div>
+                    </div>
+                    <a href="https://pixeldrain.com/u/bHNP3tv1" target="_blank" rel="noopener noreferrer" class="download-btn">
+                        Download
+                    </a>
+                </div>
+                <div class="download-item">
+                    <div class="download-info">
+                        <div class="download-name">Resurge</div>
+                        <div class="download-desc">PC Version</div>
+                    </div>
+                    <a href="https://pixeldrain.com/u/97QBrjeR" target="_blank" rel="noopener noreferrer" class="download-btn">
+                        Download
+                    </a>
+                </div>
+            </div>
+
+            <div class="discord-card">
+                <h2>💬 Join Our Discord</h2>
+                <p class="discord-text">Join our community for support, updates, and to connect with other players!</p>
+                <a href="https://discord.gg/UA4z74Epp" target="_blank" rel="noopener noreferrer" class="discord-btn">
+                    Join Discord Server
+                </a>
+            </div>
+        </section>
+
+        <!-- Players Section -->
+        <section class="section" id="players">
+            <div class="data-card">
+                <h2>All Players</h2>
+                <div class="player-list" id="playerList">
+                    <p class="loading">Loading players...</p>
+                </div>
+                <div class="card-footer">
+                    <span class="total-count" id="playerCount">0 players</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sessions Section -->
+        <section class="section" id="sessions">
+            <div class="data-card">
+                <h2>Active Sessions</h2>
+                <div class="session-list" id="sessionList">
+                    <p class="loading">Loading sessions...</p>
+                </div>
+                <div class="card-footer">
+                    <span class="total-count" id="sessionCount">0 sessions</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section class="section" id="gallery">
+            <div class="data-card">
+                <h2>Image Gallery</h2>
+                <div class="upload-section">
+                    <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                    <button class="upload-btn" onclick="document.getElementById('imageUpload').click()">
+                        📤 Upload Image
+                    </button>
+                </div>
+                <div class="gallery-grid" id="galleryGrid">
+                    <p class="loading">Loading gallery...</p>
+                </div>
+                <div class="card-footer">
+                    <span class="total-count" id="galleryCount">0 images</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- My Images Section -->
+        <section class="section" id="myimages">
+            <div class="data-card">
+                <h2>My Images</h2>
+                <div class="upload-section">
+                    <input type="file" id="myImageUpload" accept="image/*" style="display: none;">
+                    <button class="upload-btn" onclick="document.getElementById('myImageUpload').click()">
+                        📤 Upload New Image
+                    </button>
+                </div>
+                <div class="gallery-grid" id="myImagesGrid">
+                    <p class="loading">Loading your images...</p>
+                </div>
+                <div class="card-footer">
+                    <span class="total-count" id="myImagesCount">0 images</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Section -->
+        <section class="section" id="profile">
+            <div class="data-card">
+                <h2>My Profile</h2>
+                <div class="profile-section">
+                    <div class="profile-image-upload">
+                        <img id="profilePreview" src="/images/__default.png" alt="Profile Image">
+                        <input type="file" id="profileUpload" accept="image/*" style="display: none;">
+                        <button class="upload-btn" onclick="document.getElementById('profileUpload').click()">
+                            Change Profile Image
+                        </button>
+                    </div>
+                    <div class="profile-info">
+                        <h3>Profile Settings</h3>
+                        <p>Upload a custom profile image to personalize your account.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>Resurge - Everyone's Inside View</p>
+        </footer>
+    </div>
+
+    <script src="/dashboard.js"></script>
+</body>
+</html>
