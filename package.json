@@ -1,0 +1,28 @@
+{
+  "name": "resurge-server",
+  "version": "1.0.0",
+  "description": "Multi-threaded Rec Room 2017 server - Resurge focuses on 2017-2019 Rec Room",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --max-old-space-size=2048 index.js",
+    "dev": "node --max-old-space-size=2048 index.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-rate-limit": "^8.7.1",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "node-fetch": "^2.7.0",
+    "sqlite3": "^5.1.6",
+    "uuid": "^9.0.0",
+    "ws": "^8.21.3"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "author": "",
+  "license": "MIT"
+}

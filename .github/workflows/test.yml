@@ -1,0 +1,106 @@
+name: Project Element CI
+
+on:
+  push:
+    branches:
+      - developer-pr
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Server and endpoint tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check JavaScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' file; do
+            echo "Checking $file"
+            node --check "$file"
+          done < <(
+            find . \
+              -type d \( -name node_modules -o -name .git \) -prune \
+              -o -type f -name '*.js' -print0
+          )
+
+      - name: Start server
+        env:
+          PORT: 2056
+          PORTS: 2056
+          WS_PORT: 2059
+          CDN_PORT: 2058
+          NODE_ENV: test
+        run: |
+          set -euo pipefail
+
+          export JWT_SECRET="ci-jwt-$(openssl rand -hex 32)"
+          export ADMIN_KEY="ci-admin-$(openssl rand -hex 32)"
+
+          npm start > server.log 2>&1 &
+          echo $! > server.pid
+
+          echo "Server started with PID $(cat server.pid)"
+
+      - name: Test HTTP endpoints
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:2056/health \
+              -o health.json; then
+              break
+            fi
+            sleep 2
+          done
+
+          if [ ! -s health.json ]; then
+            echo "unhealthy."
+            cat server.log
+            exit 1
+          fi
+
+          for endpoint in /health /landing /dashboard; do
+            echo "Testing GET $endpoint"
+            curl --fail --silent --show-error \
+              --max-time 10 \
+              "http://127.0.0.1:2056$endpoint" \
+              -o /dev/null
+          done
+
+          curl --fail --silent --show-error \
+            -H 'User-Agent: ProjectElement-CI' \
+            http://127.0.0.1:2056/ \
+            -o root.json
+
+          node -e "
+            const fs = require('fs');
+            const data = JSON.parse(fs.readFileSync('root.json', 'utf8'));
+            if (!data || typeof data !== 'object') {
+              throw new Error('Name server did not return a JSON object');
+            }
+            console.log('Name-server JSON response is valid');
+          "
+
+      - name: Show server logs on failure
+        if: failure()
+        run: cat server.log || true
