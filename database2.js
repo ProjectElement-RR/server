@@ -252,8 +252,8 @@ const CREATE_INDEXES = [
  *
  * weekly_progress and player_objectives were originally created by
  * routes/challenge.js at require time with a schema that later diverged from
- * what that file went on to query, which made /api/challenge/v*/weekly and
- * /v*/updateProgress fail with "no such column" against an existing database.
+ * what that file went on to query, which made /api/challenge/v*weekly and
+ * /v*updateProgress fail with "no such column" against an existing database.
  */
 const DATA_REPAIRS = [
   {
