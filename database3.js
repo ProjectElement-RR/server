@@ -250,8 +250,8 @@ const CREATE_INDEXES = [
  * One-off data repairs for databases created by older builds. These run once
  * each and are recorded in schema_migrations.
  *
- * /* test */weekly and
- * /v*/updateProgress fail with "no such column" against an existing database.
+ * The weekly and versioned updateProgress endpoints fail with "no such column"
+ * against an existing database.
  */
 const DATA_REPAIRS = [
   {
